@@ -20,9 +20,9 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-// Module roter map
+// Module router map
 const { router: userRouter } = require("./routers/user");
 
-app.use("/user", userRouter);
+app.use("/api/user", userRouter);
 
 module.exports = { app };
