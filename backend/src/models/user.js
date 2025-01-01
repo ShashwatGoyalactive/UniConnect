@@ -1,4 +1,6 @@
-const { mongoose, Schema } = require("mongoose");
+const {mongoose, Schema} = require("mongoose");
+const {bcrypt} = require("bcryptjs");
+const {jwt} = require("jsonwebtoken");
 
 const userSchema = new Schema(
     {
@@ -23,10 +25,67 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
+        phone: {
+            type: String,
+        },
+        profileImage: {
+            type: String,
+            default: "image/profile/default.jpg",
+        },
+        skills: [],
+        followers: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        following: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
     },
-    { timestamps: true }
+    {timestamps: true}
 );
+
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) {
+        next();
+    }
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
+});
+
+userSchema.methods.isPasswordCorrect = async function (password) {
+    return await bcrypt.compare(password, this.password);
+};
+
+userSchema.methods.genrateAccessToken = function () {
+    return jwt.sign(
+        {
+            _id: this._id,
+            email: this.email,
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+        }
+    );
+};
+
+userSchema.methods.genrateRefreshToken = function () {
+    return jwt.sign(
+        {
+            _id: this._id,
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+        }
+    );
+};
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = { User };
+module.exports = {User};
