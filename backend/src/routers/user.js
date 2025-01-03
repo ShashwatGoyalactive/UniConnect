@@ -1,9 +1,9 @@
-const Router = require("express");
-const router = Router();
+import { Router } from "express";
+import upload from "../middlewares/multer.js";
 
-const {test, registerUser} = require("../controllers/user");
+export const router = Router();
+
+import { test, registerUser } from "../controllers/user.js";
 
 router.get("/", test);
-router.post("/register", registerUser);
-
-module.exports = {router};
+router.post("/register", upload.none(), registerUser);

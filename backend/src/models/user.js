@@ -1,6 +1,6 @@
-const {mongoose, Schema} = require("mongoose");
-const {bcrypt} = require("bcryptjs");
-const {jwt} = require("jsonwebtoken");
+import { mongoose, Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const userSchema = new Schema(
     {
@@ -46,7 +46,7 @@ const userSchema = new Schema(
             },
         ],
     },
-    {timestamps: true}
+    { timestamps: true }
 );
 
 userSchema.pre("save", async function (next) {
@@ -88,4 +88,4 @@ userSchema.methods.genrateRefreshToken = function () {
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = {User};
+export default User;

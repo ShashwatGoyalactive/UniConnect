@@ -6,4 +6,4 @@ const asyncHandler = (rquestHandler) => {
     };
 };
 
-module.exports = { asyncHandler };
+export default asyncHandler;

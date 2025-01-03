@@ -1,5 +1,5 @@
-const express = require("express");
-const cookieParser = require("cookie-parser");
+import express from "express";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -21,8 +21,8 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 // Module router map
-const { router: userRouter } = require("./routers/user");
+import { router as userRouter } from "./routers/user.js";
 
 app.use("/api/user", userRouter);
 
-module.exports = { app };
+export default app;
