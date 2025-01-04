@@ -1,4 +1,4 @@
-export const options = {
+export const OPTIONS = {
     httpOnly: true,
     secure: false,
 };
