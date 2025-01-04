@@ -3,7 +3,16 @@ import upload from "../middlewares/multer.js";
 import auth from "../middlewares/auth.js";
 export const router = Router();
 
-import { test, registerUser, login, logout, get, edittext, editimage, editpassword } from "../controllers/user.js";
+import {
+    test,
+    registerUser,
+    login,
+    logout,
+    get,
+    edittext,
+    editimage,
+    editpassword,
+} from "../controllers/user.js";
 
 router.get("/", test);
 router.post("/register", upload.single("profileImage"), registerUser);
