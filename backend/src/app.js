@@ -9,7 +9,7 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
         "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
+        "Origin, X-Requested-With, Content-Type, Accept",
     );
     next();
 });
@@ -22,7 +22,11 @@ app.use(cookieParser());
 
 // Module router map
 import { router as userRouter } from "./routers/user.js";
+import { router as team } from "./routers/team.js";
+import { router as event_ } from "./routers/event.js";
 
 app.use("/api/user", userRouter);
+app.use("api/team", team);
+app.use("api/event", event_);
 
 export default app;
