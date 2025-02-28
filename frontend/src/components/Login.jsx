@@ -11,36 +11,20 @@ const Login = () => {
 
     useEffect(() => {
         const checkLogin = async () => {
-            const accessToken = localStorage.getItem("accessToken");
-            const refreshToken = localStorage.getItem("refreshToken");
+           try {
+                const response = await makeGetRequest("/users/get");
 
-            if (accessToken) {
-                try {
-                    const response = await makeGetRequest("/users/get", true);
-                    if (response != null) {
-                        dispatch(login(response.data));
-                        navigate("/");
-                        return;
-                    }
-                } catch (error) {
-                    console.log("Access token is expired , truing refresh token", error);
+                if(response && response.data){
+                    dispatch(login(response.data));
+                    navigate("/");
                 }
-            }
+           } catch (error) {
+                console.log("Login session expired , login again" , error);
+                
+           }
 
-            if (refreshToken) {
-                try {
-                    const response = await makeGetRequest("/users/refresh", true);
-                    if (response != null) {
-                        dispatch(login(response.data));
-                        navigate("/");
-                        return;
-                    }
-                } catch (error) {
-                    console.log("Refresh token is expired , login again", error);
-                }
-            }
-        };
-
+        }   
+        
         checkLogin();
     }, []);
 
@@ -48,20 +32,16 @@ const Login = () => {
         event.preventDefault();
         try {
             const formData = new FormData(event.target);
-            const response = await makePostRequest("/users/login", formData, true);
+            const response = await makePostRequest("/users/login", formData);
 
             if (response && response.data) {
-                const { accessToken, refreshToken } = response.data;
-
-                if (accessToken && refreshToken) {
-                    localStorage.setItem("accessToken", accessToken);
-                    localStorage.setItem("refreshToken", refreshToken);
+                
                     dispatch(login(response.data));
                     navigate("/");
                 } else {
                     console.error("Error: Tokens missing in response");
                 }
-            }
+            
         } catch (error) {
             console.error("Login failed:", error);
         }
