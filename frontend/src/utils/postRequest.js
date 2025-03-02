@@ -1,10 +1,10 @@
 
-const makePostRequest = async (url , formData , auth = false) => {
+const makePostRequest = async (url , formData) => {
 
   try {
       const response = await fetch(`api${url}` ,{
           method: "POST",
-          credentials : auth ? 'include' : 'omit',
+          credentials :"include",
           body : formData,
       });
       if(!response.ok){

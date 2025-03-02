@@ -1,8 +1,8 @@
- const makeGetRequest = async (url , auth = false) =>  {
+ const makeGetRequest = async (url) =>  {
    try {
      const response = await fetch(`api${url}`, {
          method: "GET",
-         credentials : auth ? 'include' :"omit",
+         credentials : "include",
      });
  
     if(!response.ok){
